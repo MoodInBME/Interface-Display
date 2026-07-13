@@ -1,0 +1,43 @@
+[project]
+name = "moodin-interface"
+version = "0.1.0"
+description = "MoodIn Smart Mirror — Interface & Display layer (PySide6 + QML kiosk)"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "LGPL-3.0-or-later" }
+authors = [
+    { name = "Tim VisionaryX — ITS" },
+]
+dependencies = [
+    "PySide6==6.7.2",
+    "paho-mqtt==2.1.0",
+    "PyYAML==6.0.2",
+    "python-dotenv==1.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.2.2",
+    "ruff==0.5.5",
+]
+
+[project.scripts]
+moodin-interface = "moodin_interface.__main__:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+moodin_interface = ["resources/qml/**/*.qml", "resources/qml/**/qmldir"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

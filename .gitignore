@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Env & secrets
+.env
+*.pem
+*.key
+*.crt
+
+# Runtime data
+data/*.db
+data/*.sqlite3
+logs/
+*.log
+
+# Qt / QML
+*.qmlc
+*.jsc
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

@@ -1,0 +1,16 @@
+[Unit]
+Description=MoodIn Smart Mirror - Interface & Display (kiosk)
+After=network-online.target moodin-hardware.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/moodin/Interface-Display
+ExecStart=/opt/moodin/Interface-Display/scripts/run_kiosk.sh
+Restart=on-failure
+RestartSec=5
+# Tunggu display server siap sebelum start (mis. cage/labwc di user session).
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+
+[Install]
+WantedBy=default.target
