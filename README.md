@@ -9,7 +9,7 @@ Dibangun dengan **PySide6 + QML**, berjalan fullscreen di Raspberry Pi 5 (Debian
 | ------------------------------- | ------------------------------------------------------------------ |
 | `MoodIn-master`               | Orkestrator / boot / intro alat                                    |
 | `Hardware-Connections`        | Kamera, sensor, protokol fisik, presence                           |
-| `Software-Architecture`       | Inferensi DL (ST-GCN + STC-rPPG), feature fusion                   |
+| `Software-Architecture`       | Inferensi DL (ST-GCN + STC-rPPG), fusi VA-bridge                   |
 | **`Interface-Display`** | **Layar kiosk: navigasi, input, tampilan hasil, tren lokal** |
 
 ## Arsitektur
