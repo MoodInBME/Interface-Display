@@ -3,7 +3,7 @@
 
 Lapisan antarmuka & tampilan (kiosk) untuk **MoodIn — Smart Mirror untuk Klasifikasi Mood Berbasis Graph Convolutional Network dan remote Photoplethysmography sebagai Personal Wellness Coach**.
 
-Dibangun dengan **PySide6 + QML**, berjalan fullscreen di Raspberry Pi 5 (Debian Trixie) pada panel Waveshare 10.1" 1024x600. Repo ini adalah salah satu dari empat repo organisasi `MoodIn`:
+Dibangun dengan **PySide6 + QML**, berjalan fullscreen pada panel Waveshare 10.1" 1024x600. Target utama kini **Jetson Orin Nano Super (Ubuntu 22.04, JetPack 6.2.1)** — board yang sama dengan mesin inferensi; Raspberry Pi 5 (Debian Trixie) tetap didukung sebagai alternatif. Repo ini adalah salah satu dari empat repo organisasi `MoodIn`:
 
 | Repo                            | Peran                                                              |
 | ------------------------------- | ------------------------------------------------------------------ |
@@ -49,15 +49,16 @@ Lihat `docs/ipc-contract.md` untuk skema payload dan `docs/screen-map.md` untuk 
 
 ## Prasyarat
 
-- Raspberry Pi 5 (16 GB) dengan Debian Trixie.
+- **Jetson Orin Nano Super** (Ubuntu 22.04, JetPack 6.2.1) sebagai target utama, atau Raspberry Pi 5 (16 GB, Debian Trixie) sebagai alternatif.
 - Python 3.12 (bukan 3.14 — dukungan wheel PySide6/paho belum stabil).
 - Broker MQTT aktif dengan TLS (sertifikat CA tersedia).
 - Compositor Wayland (labwc/cage) atau eglfs untuk mode kiosk.
+- Panel Waveshare masuk lewat HDMI; pada Jetson (keluaran DisplayPort) gunakan adapter aktif **DP→HDMI**.
 
 ## Instalasi
 
 ```bash
-    git clone https://github.com/MoodIn/Interface-Display.git /opt/moodin/Interface-Display
+    git clone https://github.com/MoodInBME/Interface-Display.git /opt/moodin/Interface-Display
     cd /opt/moodin/Interface-Display
     bash scripts/install.sh
 ```
