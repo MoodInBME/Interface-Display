@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Instalasi Interface-Display di Raspberry Pi 5 (Debian Trixie).
+# Instalasi Interface-Display di Jetson Orin Nano Super (Ubuntu 24.04).
 # Jalankan sebagai user 'moodin' (bukan root), kecuali langkah apt.
 set -euo pipefail
 

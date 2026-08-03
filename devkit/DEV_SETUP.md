@@ -2,7 +2,7 @@
 
 Panduan ini untuk menjalankan UI di laptop (Windows/macOS/Linux) dalam mode
 *windowed*. **Jangan** jalankan `scripts/install.sh` atau `scripts/run_kiosk.sh`
-di laptop — keduanya khusus Raspberry Pi (apt, systemd, Wayland/eglfs).
+di laptop — keduanya khusus Jetson Orin Nano Super (apt, systemd, Wayland/eglfs).
 
 ## 0. Yang perlu dipasang
 
