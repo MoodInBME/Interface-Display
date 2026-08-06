@@ -39,7 +39,7 @@ def encode_command(cmd: Command) -> bytes:
 def parse_result(payload: bytes) -> InferenceResult:
     d = json.loads(payload)
     return InferenceResult(
-        mood_id=str(d["mood_id"]),
+        mood_id=_mood_id(d["mood_id"]),
         mood_label=str(d["mood_label"]),
         confidence=float(d["confidence"]),
         valence=float(d.get("valence", 0.0)),
@@ -47,6 +47,9 @@ def parse_result(payload: bytes) -> InferenceResult:
         heart_rate_bpm=_opt_float(d.get("heart_rate_bpm")),
         hrv_ms=_opt_float(d.get("hrv_ms")),
         session_id=str(d.get("session_id", "")),
+        physio_used=bool(d.get("physio_used", False)),
+        simulated=bool(d.get("simulated", False)),
+        version=str(d.get("version", "1.1.0")),
     )
 
 
@@ -66,6 +69,35 @@ def parse_presence(payload: bytes) -> PresenceEvent:
         present=bool(d["present"]),
         distance_cm=_opt_float(d.get("distance_cm")),
     )
+
+
+_LEGACY_MOOD_IDS = {
+    "ceria": 0, "cemas": 1, "tertekan": 2, "rileks": 3, "netral": 4,
+}
+
+
+def _mood_id(value: object) -> int:
+    """Terima integer 0..4. String legacy diterima tapi diberi peringatan.
+
+    Kontrak v1.1.0 menetapkan mood_id sebagai INTEGER. Penerjemahan string
+    di sini hanya jaring pengaman selama Software-Architecture belum
+    seragam; jangan dijadikan jalur normal.
+    """
+    if isinstance(value, bool):
+        raise ValueError("mood_id tidak boleh boolean")
+    if isinstance(value, int):
+        return value
+    if isinstance(value, str):
+        key = value.strip().lower()
+        if key.isdigit():
+            return int(key)
+        if key in _LEGACY_MOOD_IDS:
+            import logging
+            logging.getLogger(__name__).warning(
+                "mood_id string %r diterima; penerbit masih memakai "
+                "kontrak lama. Harusnya integer 0..4.", value)
+            return _LEGACY_MOOD_IDS[key]
+    raise ValueError("mood_id tidak dikenal: " + repr(value))
 
 
 def _opt_float(value: object) -> float | None:

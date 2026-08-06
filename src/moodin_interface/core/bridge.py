@@ -31,7 +31,9 @@ class UiBridge(QObject):
         self._db = db
 
         self._mood_label = ""
-        self._mood_id = ""
+        self._mood_id = -1        # -1 = belum ada hasil
+        self._physio_used = False
+        self._simulated = False
         self._confidence = 0.0
         self._heart_rate = 0.0
         self._signal_quality = 0.0
@@ -54,9 +56,20 @@ class UiBridge(QObject):
     def moodLabel(self) -> str:
         return self._mood_label
 
-    @Property(str, notify=resultChanged)
-    def moodId(self) -> str:
+    @Property(int, notify=resultChanged)
+    def moodId(self) -> int:
+        """Integer 0..4 sesuai kontrak IPC v1.1.0. -1 bila belum ada."""
         return self._mood_id
+
+    @Property(bool, notify=resultChanged)
+    def physioUsed(self) -> bool:
+        """False -> sembunyikan kartu TTV, jangan tampilkan angka basi."""
+        return self._physio_used
+
+    @Property(bool, notify=resultChanged)
+    def simulated(self) -> bool:
+        """True -> tampilkan pita MODE DEMO secara permanen."""
+        return self._simulated
 
     @Property(float, notify=resultChanged)
     def confidence(self) -> float:
@@ -115,6 +128,8 @@ class UiBridge(QObject):
     def _on_result(self, result: InferenceResult) -> None:
         self._mood_id = result.mood_id
         self._mood_label = result.mood_label
+        self._physio_used = result.physio_used
+        self._simulated = result.simulated
         self._confidence = result.confidence
         self._heart_rate = result.heart_rate_bpm or 0.0
         self._db.insert_result(result)
