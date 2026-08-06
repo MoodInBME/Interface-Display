@@ -2,8 +2,10 @@
 app:
   display_mode: kiosk          # kiosk | windowed
   resolution:
-    width: 1024                # Waveshare 10.1" IPS (Tabel 1)
-    height: 600
+    # Waveshare 10.1" IPS diputar ke PORTRAIT sesuai arahan dosen.
+    # Panel fisik 1024x600; rotasi dilakukan di level compositor.
+    width: 600
+    height: 1024
   idle_timeout_seconds: 45     # kembali ke IdleMirror setelah tidak ada interaksi
   presence_grace_seconds: 8    # tunggu sebelum anggap user pergi
 
@@ -15,21 +17,23 @@ capture:
   min_signal_quality: 0.6      # 0..1, dari topik moodin/signal/quality
 
 mood:
-  # 5 kelas sesuai proposal (kuadran valence-arousal)
+  # 5 kelas sesuai proposal (kuadran valence-arousal).
+  # id WAJIB integer dan urutannya WAJIB sama dengan MOOD_CLASSES di
+  # Software-Architecture/models/st_gcn_graph_tran/labels.py
   classes:
-    - id: ceria
+    - id: 0
       label: "Ceria"
       quadrant: Q1
-    - id: cemas
+    - id: 1
       label: "Cemas"
       quadrant: Q2
-    - id: tertekan
+    - id: 2
       label: "Tertekan"
       quadrant: Q3
-    - id: rileks
+    - id: 3
       label: "Rileks"
       quadrant: Q4
-    - id: netral
+    - id: 4
       label: "Netral"
       quadrant: center
 
