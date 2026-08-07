@@ -28,6 +28,9 @@ class Command(str, Enum):
     CANCEL_CAPTURE = "cancel_capture"
 
 
+IPC_VERSION = "1.1.0"
+
+
 def encode_command(cmd: Command) -> bytes:
     payload = {
         "command": cmd.value,
@@ -49,7 +52,7 @@ def parse_result(payload: bytes) -> InferenceResult:
         session_id=str(d.get("session_id", "")),
         physio_used=bool(d.get("physio_used", False)),
         simulated=bool(d.get("simulated", False)),
-        version=str(d.get("version", "1.1.0")),
+        version=str(d.get("version", IPC_VERSION)),
     )
 
 

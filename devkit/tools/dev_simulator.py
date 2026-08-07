@@ -15,12 +15,15 @@ sinyal menaik lalu satu hasil mood acak -> UI otomatis pindah ke ResultScreen.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import random
 import time
 from datetime import datetime, timezone
 
 import paho.mqtt.client as mqtt
+
+from moodin_interface.ipc.contracts import IPC_VERSION
 
 BROKER_HOST = "localhost"
 BROKER_PORT = 1883
@@ -31,15 +34,15 @@ TOPIC_PRESENCE = "moodin/presence"
 TOPIC_COMMAND = "moodin/ui/command"
 
 MOODS = [
-    ("ceria", "Ceria", 0.7, 0.6),
-    ("cemas", "Cemas", -0.5, 0.7),
-    ("tertekan", "Tertekan", -0.6, -0.3),
-    ("rileks", "Rileks", 0.5, -0.4),
-    ("netral", "Netral", 0.0, 0.0),
+    (0, "Ceria", 0.7, 0.6),
+    (1, "Cemas", -0.5, 0.7),
+    (2, "Tertekan", -0.6, -0.3),
+    (3, "Rileks", 0.5, -0.4),
+    (4, "Netral", 0.0, 0.0),
 ]
 
 
-def publish_result(client: mqtt.Client) -> None:
+def publish_result(client: mqtt.Client, use_physio: bool) -> None:
     mood_id, label, valence, arousal = random.choice(MOODS)
     payload = {
         "mood_id": mood_id,
@@ -47,10 +50,16 @@ def publish_result(client: mqtt.Client) -> None:
         "confidence": round(random.uniform(0.70, 0.95), 2),
         "valence": valence,
         "arousal": arousal,
-        "heart_rate_bpm": round(random.uniform(62, 88), 1),
-        "hrv_ms": round(random.uniform(30, 60), 1),
         "session_id": datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S"),
+        "physio_used": use_physio,
+        "simulated": True,
+        "version": IPC_VERSION,
     }
+    
+    if use_physio:
+        payload["heart_rate_bpm"] = round(random.uniform(62, 88), 1)
+        payload["hrv_ms"] = round(random.uniform(30, 60), 1)
+        
     client.publish(TOPIC_RESULT, json.dumps(payload), qos=1)
     print(f"[sim] hasil mood dipublikasikan: {label}")
 
@@ -68,34 +77,39 @@ def on_connect(client, userdata, flags, reason_code, properties=None) -> None:
     print("[sim] presence=true dikirim. Klik layar cermin untuk masuk menu.")
 
 
-def on_message(client, userdata, msg) -> None:
-    try:
-        data = json.loads(msg.payload)
-    except ValueError:
-        return
-    if msg.topic == TOPIC_COMMAND and data.get("command") == "start_capture":
-        print("[sim] menerima start_capture -> simulasi akuisisi ~3 dtk")
-        for q in (0.4, 0.6, 0.85):
-            client.publish(
-                TOPIC_QUALITY,
-                json.dumps({
-                    "quality": q,
-                    "face_detected": True,
-                    "illumination_ok": True,
-                    "message": "",
-                }),
-                qos=1,
-            )
-            time.sleep(1)
-        publish_result(client)
-
-
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Simulator lokal untuk MoodIn Interface-Display.")
+    parser.add_argument("--no-physio", action="store_true", help="Kirim physio_used: False dan hilangkan data BPM.")
+    args = parser.parse_args()
+    
+    use_physio = not args.no_physio
+
+    def on_message_handler(client, userdata, msg):
+        try:
+            data = json.loads(msg.payload)
+        except ValueError:
+            return
+        if msg.topic == TOPIC_COMMAND and data.get("command") == "start_capture":
+            print("[sim] menerima start_capture -> simulasi akuisisi ~3 dtk")
+            for q in (0.4, 0.6, 0.85):
+                client.publish(
+                    TOPIC_QUALITY,
+                    json.dumps({
+                        "quality": q,
+                        "face_detected": True,
+                        "illumination_ok": True,
+                        "message": "",
+                    }),
+                    qos=1,
+                )
+                time.sleep(1)
+            publish_result(client, use_physio)
+
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="dev-simulator")
     client.on_connect = on_connect
-    client.on_message = on_message
+    client.on_message = on_message_handler
     client.connect(BROKER_HOST, BROKER_PORT, 30)
-    print("[sim] simulator berjalan. Tekan Ctrl+C untuk berhenti.")
+    print(f"[sim] simulator berjalan (physio_used={use_physio}). Tekan Ctrl+C untuk berhenti.")
     try:
         client.loop_forever()
     except KeyboardInterrupt:
