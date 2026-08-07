@@ -17,6 +17,8 @@ venv/
 # Runtime data
 data/*.db
 data/*.sqlite3
+data/*.bak*
+*.db.*.bak*
 logs/
 *.log
 
