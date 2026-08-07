@@ -134,6 +134,7 @@ Item {
 
             ColumnLayout {
                 Layout.preferredWidth: Theme.touchTarget * 3
+                Layout.maximumWidth: Theme.touchTarget * 3
                 Layout.fillHeight: true
                 spacing: Theme.spacing
 
@@ -147,15 +148,7 @@ Item {
                     iconOnLeft: false
                     onClicked: bridge.navigate("settings")
 
-                    iconSlot: Component {
-                        Item {
-                            readonly property real assetRatio: 1.0
-                            readonly property real maxHeight: (Theme.touchTarget + Theme.spacing) - (2 * Theme.sp2)
-                            implicitHeight: Math.min(80, maxHeight > 0 ? maxHeight : 80)
-                            implicitWidth: implicitHeight * assetRatio
-                            // TODO ikon: Group 58
-                        }
-                    }
+                    // TODO Group 58 adalah overlay latar tombol penuh 215x94, tangani lewat properti background bukan iconSlot
                 }
 
                 PrimaryButton {
@@ -169,21 +162,14 @@ Item {
                     onClicked: bridge.navigate("idleMirror")
                     // TODO gradasi menunggu token Theme
 
-                    iconSlot: Component {
-                        Item {
-                            readonly property real assetRatio: 1.0
-                            readonly property real maxHeight: (Theme.touchTarget + Theme.spacing) - (2 * Theme.sp2)
-                            implicitHeight: Math.min(80, maxHeight > 0 ? maxHeight : 80)
-                            implicitWidth: implicitHeight * assetRatio
-                            // TODO ikon: Group 59
-                        }
-                    }
+                    // TODO Group 59 adalah overlay latar tombol penuh 215x94, tangani lewat properti background bukan iconSlot
                 }
             }
 
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.minimumWidth: Theme.touchTarget * 2
                 
                 Item {
                     anchors.right: parent.right

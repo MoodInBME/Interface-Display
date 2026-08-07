@@ -8,6 +8,7 @@ from pathlib import Path
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
+from PySide6.QtQuickControls2 import QQuickStyle
 
 from moodin_interface.config import load_config
 from moodin_interface.core.bridge import UiBridge
@@ -26,6 +27,7 @@ def run(argv: list[str]) -> int:
     setup_logging(cfg.log_level)
     log.info("Memulai MoodIn Interface-Display (mode=%s)", cfg.display_mode)
 
+    QQuickStyle.setStyle("Basic")
     app = QGuiApplication(argv)
 
     db = TrendsDatabase(cfg.db_path)
