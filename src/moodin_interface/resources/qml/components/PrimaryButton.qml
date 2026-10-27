@@ -6,7 +6,7 @@ import "../theme"
 Button {
     id: control
     property color accent: Theme.primary
-    property color textColor: Theme.background
+    property color textColor: Theme.textOnAccent
     property string subtitle: ""
     property Component iconSlot: null
     property bool iconOnLeft: false

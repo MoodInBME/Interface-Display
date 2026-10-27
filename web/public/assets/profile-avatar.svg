@@ -1,0 +1,28 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="69.8402" height="69.8402" viewBox="0 0 69.8402 69.8402" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 57" filter="url(#filter0_d_0_13)">
+<circle id="Ellipse 15" cx="33.8202" cy="33.8202" r="32.7204" fill="#00AC46"/>
+<g id="Group 41">
+<mask id="mask0_0_13" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="1" y="1" width="66" height="66">
+<path id="Ellipse 16" d="M66.5406 33.8202C66.5406 51.8912 51.8912 66.5406 33.8202 66.5406C15.7493 66.5406 1.09985 51.8912 1.09985 33.8202C1.09985 15.7493 15.7493 1.09985 33.8202 1.09985C51.8912 1.09985 66.5406 15.7493 66.5406 33.8202Z" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_0_13)">
+<g id="Group 40">
+<circle id="Ellipse 17" cx="33.8202" cy="20.3474" r="10.1048" fill="#DBF7FF"/>
+<path id="Rectangle 9" d="M7.35563 53.3087C7.35563 42.5459 16.0807 33.8208 26.8435 33.8208H40.3166C51.0795 33.8208 59.8045 42.5459 59.8045 53.3087C59.8045 64.0716 51.0795 72.7966 40.3166 72.7966H26.8435C16.0807 72.7966 7.35563 64.0716 7.35563 53.3087Z" fill="#DBF7FF"/>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_0_13" x="0" y="0" width="69.8402" height="69.8402" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="1.09985" dy="1.09985"/>
+<feGaussianBlur stdDeviation="1.09985"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_13"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_13" result="shape"/>
+</filter>
+</defs>
+</svg>

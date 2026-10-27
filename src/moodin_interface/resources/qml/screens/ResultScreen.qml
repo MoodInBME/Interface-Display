@@ -4,6 +4,25 @@ import "../components"
 import "../theme"
 
 Item {
+    Rectangle {
+        visible: bridge.simulated
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: bannerText.implicitHeight + (Theme.sp2 * 2)
+        color: Theme.warning
+        // Aturan: tambahkan radiusSm sesuai permintaan
+        radius: Theme.radiusSm
+
+        Text {
+            id: bannerText
+            anchors.centerIn: parent
+            text: "DATA SIMULASI - BUKAN HASIL PENGUKURAN"
+            color: Theme.warningDeep
+            font.pixelSize: Theme.fontCaption
+        }
+    }
+
     ColumnLayout {
         anchors.centerIn: parent
         spacing: Theme.spacing
@@ -16,7 +35,7 @@ Item {
             Text {
                 anchors.centerIn: parent
                 text: bridge.moodLabel
-                color: Theme.background
+                color: Theme.textPrimary
                 font.pixelSize: Theme.fontTitle
                 font.bold: true
             }
@@ -41,11 +60,14 @@ Item {
             spacing: Theme.spacing
             PrimaryButton {
                 text: "Lihat Tren"
-                accent: Theme.success
+                accent: Theme.primary
+                textColor: Theme.textOnAccent
                 onClicked: bridge.navigate("trends")
             }
             PrimaryButton {
                 text: "Selesai"
+                accent: Theme.warning
+                textColor: Theme.warningDeep
                 onClicked: bridge.navigate("mainMenu")
             }
         }

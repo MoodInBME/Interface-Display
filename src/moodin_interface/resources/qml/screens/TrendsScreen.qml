@@ -43,6 +43,9 @@ Item {
                     Rectangle {
                         width: 20; height: 20; radius: 10
                         color: Theme.moodColor(modelData.mood_id)
+                        border.width: 2
+                        border.color: Theme.moodDotBorder
+                        antialiasing: true
                     }
                     Text {
                         text: modelData.mood_label
@@ -67,7 +70,8 @@ Item {
 
         PrimaryButton {
             text: "Kembali"
-            accent: Theme.textSecondary
+            accent: Theme.warning
+            textColor: Theme.warningDeep
             Layout.alignment: Qt.AlignHCenter
             onClicked: bridge.navigate("mainMenu")
         }

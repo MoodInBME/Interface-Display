@@ -19,20 +19,19 @@ import QtQuick
 QtObject {
     id: theme
 
-    // displayMode adalah context property dari app.py: "kiosk" atau "windowed".
-    readonly property bool isMirror: typeof displayMode !== "undefined"
-                                     && displayMode === "kiosk"
-
     // ---------- Permukaan ----------
-    // Palet cermin ditetapkan tim: #3A3A3A, BUKAN #0A0E12 versi lama.
-    readonly property color background:    "#3A3A3A"  // 550x
-    readonly property color surface:       "#505357"  // kartu di atas latar
-    readonly property color surfaceSunken: "#1E1E1E"  // 6x
+    // Palet mengikuti ekspor Figma bingkai 04-Home-Tamu: latar gradasi putih ke #DBF7FF,
+    // dan teks warna gelap #3A3A3A.
+    readonly property color backgroundGradientStart: "#FFFFFF"
+    readonly property color backgroundGradientEnd:   "#DBF7FF"
+    readonly property color background:    "#DBF7FF"
+    readonly property color surface:       "#FFFFFF"
+    readonly property color surfaceSunken: "#C9EEF7"
 
     // ---------- Teks ----------
-    readonly property color textPrimary:   "#DBF7FF"  // 38x
-    readonly property color textSecondary: "#A0A0A0"  // 82x
-    readonly property color textOnAccent:  "#1E1E1E"
+    readonly property color textPrimary:   "#3A3A3A"
+    readonly property color textSecondary: "#6B6B6B"
+    readonly property color textOnAccent:  "#3A3A3A"
 
     // ---------- Aksen dan status ----------
     readonly property color primary:     "#48C2FF"  // 68x, biru interaktif
@@ -51,6 +50,7 @@ QtObject {
     // ---------- Mood ----------
     // Indeks WAJIB sama dengan MOOD_CLASSES di labels.py:
     // 0 Ceria, 1 Cemas, 2 Tertekan, 3 Rileks, 4 Netral
+    readonly property color moodDotBorder: "#3A3A3A"
     readonly property var moodColors: [
         "#FFE46B", "#FF9898", "#7E2F2F", "#48C2FF", "#A0A0A0"
     ]
@@ -78,13 +78,14 @@ QtObject {
 
     // ---------- Tipografi ----------
     // Cermin dilihat dari ~55 cm, jendela dev dari ~30 cm.
-    readonly property int fontHuge:     isMirror ? 56 : 34
-    readonly property int fontTitle:    isMirror ? 32 : 24
-    readonly property int fontSubtitle: isMirror ? 26 : 19
-    readonly property int fontBody:     isMirror ? 20 : 15
-    readonly property int fontCaption:  isMirror ? 16 : 12
+    readonly property int fontHuge:     56
+    readonly property int fontTitle:    32
+    readonly property int fontSubtitle: 26
+    readonly property int fontBody:     20
+    readonly property int fontCaption:  16
 
     // ---------- Jarak dan bentuk ----------
+    readonly property int screenMargin: 56
     readonly property int spacing: 24
     readonly property int sp1: 4
     readonly property int sp2: 8
@@ -94,8 +95,8 @@ QtObject {
 
     readonly property int radius:   18
     readonly property int radiusSm: 8
-    readonly property int radiusLg: 24
+    readonly property int radiusLg: 28
 
     // Cermin disentuh sambil berdiri, sasarannya harus lebih besar.
-    readonly property int touchTarget: isMirror ? 72 : 48
+    readonly property int touchTarget: 72
 }

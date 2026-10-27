@@ -15,6 +15,15 @@ Window {
     // Kiosk fullscreen; windowed untuk dev.
     visibility: displayMode === "kiosk" ? Window.FullScreen : Window.Windowed
 
+    Rectangle {
+        anchors.fill: parent
+        gradient: Gradient {
+            GradientStop { position: 0.0;   color: Theme.backgroundGradientStart }
+            GradientStop { position: 0.511; color: Theme.backgroundGradientEnd }
+            GradientStop { position: 1.0;   color: Theme.backgroundGradientEnd }
+        }
+    }
+
     // Peta screen -> komponen.
     function screenSource(name) {
         switch (name) {

@@ -1,16 +1,41 @@
-import React from 'react';
+const emojis = [
+  {
+    src: '/assets/mood-emoji-4.svg',
+    face: '/assets/mood-face-4.svg',
+    className: 'absolute right-[18%] top-0 size-[64px] rotate-[14deg]',
+    faceClassName: 'absolute left-1/2 top-1/2 size-[52px] -translate-x-1/2 -translate-y-[35%]',
+  },
+  {
+    src: '/assets/mood-emoji-1.svg',
+    className: 'absolute right-0 top-[18%] size-[112px] rotate-[9deg]',
+  },
+  {
+    src: '/assets/mood-emoji-2.svg',
+    className: 'absolute bottom-0 right-[22%] size-[124px] -rotate-[21deg]',
+  },
+  {
+    src: '/assets/mood-emoji-3.svg',
+    face: '/assets/mood-face-3.svg',
+    className: 'absolute bottom-[4%] right-0 size-[86px] rotate-[23deg]',
+    faceClassName: 'absolute left-1/2 top-1/2 size-[68px] -translate-x-1/2 -translate-y-[42%]',
+  },
+]
 
-export const MoodIllustration: React.FC = () => {
-  // Koordinat asli dari prompt diubah menjadi relatif terhadap kartu (x: 55.44, y: 256.264)
-  const cx = (x: number) => x - 55.44;
-  const cy = (y: number) => y - 256.264;
-
+export function MoodIllustration() {
   return (
-    <>
-      <div style={{ position: 'absolute', width: 55.748 * 2, height: 55.748 * 2, borderRadius: '50%', background: 'var(--primary)', left: cx(475.855) - 55.748, top: cy(292.717) - 55.748 }} />
-      <div style={{ position: 'absolute', width: 61.976 * 2, height: 61.976 * 2, borderRadius: '50%', background: 'var(--warning)', left: cx(386.692) - 61.976, top: cy(396.338) - 61.976 }} />
-      <div style={{ position: 'absolute', width: 42.576 * 2, height: 42.576 * 2, borderRadius: '50%', background: 'var(--success)', left: cx(505.965) - 42.576, top: cy(395.746) - 42.576 }} />
-      <div style={{ position: 'absolute', width: 32.431 * 2, height: 32.431 * 2, borderRadius: '50%', background: 'var(--physio)', left: cx(372.711) - 32.431, top: cy(293.255) - 32.431 }} />
-    </>
-  );
-};
+    <div className="relative h-[150px] w-[210px] shrink-0 overflow-visible">
+      {emojis.map((emoji) => (
+        <div key={emoji.src} className={emoji.className}>
+          <img alt="" className="size-full object-contain" src={emoji.src} />
+          {emoji.face ? (
+            <img
+              alt=""
+              className={`pointer-events-none ${emoji.faceClassName}`}
+              src={emoji.face}
+            />
+          ) : null}
+        </div>
+      ))}
+    </div>
+  )
+}

@@ -51,8 +51,8 @@ def parse_result(payload: bytes) -> InferenceResult:
         hrv_ms=_opt_float(d.get("hrv_ms")),
         session_id=str(d.get("session_id", "")),
         physio_used=bool(d.get("physio_used", False)),
-        simulated=bool(d.get("simulated", False)),
-        version=str(d.get("version", IPC_VERSION)),
+        simulated=bool(d.get("simulated", True)),
+        version=str(d.get("version", "unknown")),
     )
 
 

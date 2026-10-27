@@ -19,13 +19,13 @@ Item {
             Layout.preferredWidth: Theme.touchTarget
             Layout.preferredHeight: Theme.touchTarget
             radius: width / 2
-            color: Theme.surface
+            color: Theme.success
             Layout.alignment: Qt.AlignHCenter
 
             Text {
                 anchors.centerIn: parent
                 text: "?"
-                color: Theme.textSecondary
+                color: Theme.textOnAccent
                 font.pixelSize: Theme.fontTitle
                 font.bold: true
             }
@@ -48,9 +48,9 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.leftMargin: Theme.spacing * 2
-        anchors.rightMargin: Theme.spacing * 2
-        anchors.bottomMargin: Theme.spacing
+        anchors.leftMargin: Theme.screenMargin
+        anchors.rightMargin: Theme.screenMargin
+        anchors.bottomMargin: Theme.screenMargin
         spacing: Theme.spacing
 
         // Header
@@ -84,7 +84,7 @@ Item {
             Layout.fillWidth: true
             Layout.preferredHeight: Theme.touchTarget * 2.5
             accent: Theme.danger
-            textColor: Theme.dangerDeep
+            textColor: Theme.textPrimary
             text: "Deteksi Mood"
             subtitle: "Deteksi moodmu sekarang!"
             iconOnLeft: false
@@ -107,6 +107,7 @@ Item {
             font.pixelSize: Theme.fontTitle
             Layout.fillWidth: true
             Layout.preferredHeight: Theme.touchTarget * 2.5
+            Layout.topMargin: Theme.sp2
             accent: Theme.primary
             textColor: Theme.textOnAccent
             text: "Tren 7 Hari"
@@ -127,16 +128,17 @@ Item {
 
         // Area Bawah (Pengaturan, Kembali, Maskot)
         RowLayout {
+            Layout.topMargin: Theme.sp5
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumHeight: (Theme.touchTarget * 2) + Theme.spacing
-            spacing: Theme.spacing
+            spacing: 0
 
             ColumnLayout {
                 Layout.preferredWidth: Theme.touchTarget * 3
                 Layout.maximumWidth: Theme.touchTarget * 3
                 Layout.fillHeight: true
-                spacing: Theme.spacing
+                spacing: Theme.sp3
 
                 PrimaryButton {
                     id: btnSettings
@@ -155,8 +157,8 @@ Item {
                     id: btnBack
                     Layout.fillWidth: true
                     Layout.preferredHeight: Theme.touchTarget + Theme.spacing
-                    accent: Theme.surface
-                    textColor: Theme.textPrimary
+                    accent: Theme.warning
+                    textColor: Theme.warningDeep
                     text: "Kembali"
                     iconOnLeft: false
                     onClicked: bridge.navigate("idleMirror")
@@ -169,7 +171,7 @@ Item {
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.minimumWidth: Theme.touchTarget * 2
+                Layout.rightMargin: -Theme.screenMargin
                 
                 Item {
                     anchors.right: parent.right
@@ -187,15 +189,23 @@ Item {
             }
         }
 
-        Text {
+        Rectangle {
             visible: !bridge.brokerConnected
-            text: "⚠ Tidak terhubung ke sistem — deteksi nonaktif"
-            color: Theme.danger
-            font.pixelSize: Theme.fontBody
-            Layout.alignment: Qt.AlignHCenter
             Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            horizontalAlignment: Text.AlignHCenter
+            Layout.preferredHeight: warningText.implicitHeight + (Theme.sp2 * 2)
+            color: Theme.danger
+            radius: Theme.radiusSm
+
+            Text {
+                id: warningText
+                anchors.centerIn: parent
+                width: parent.width - (Theme.sp2 * 2)
+                text: "⚠ Tidak terhubung ke sistem — deteksi nonaktif"
+                color: Theme.textPrimary
+                font.pixelSize: Theme.fontBody
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignHCenter
+            }
         }
     }
 }

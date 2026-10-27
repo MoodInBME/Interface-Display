@@ -14,7 +14,7 @@ Row {
     }
     Text {
         text: "Sinyal: " + Math.round(quality * 100) + "%"
-        color: Theme.textSecondary
+        color: Theme.textPrimary
         font.pixelSize: Theme.fontBody
     }
 }

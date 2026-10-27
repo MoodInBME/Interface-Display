@@ -32,7 +32,9 @@ def run(argv: list[str]) -> int:
 
     db = TrendsDatabase(cfg.db_path)
     mqtt = MqttClient(cfg.mqtt)
+    mqtt.setParent(app)
     bridge = UiBridge(mqtt, db)
+    bridge.setParent(app)
 
     engine = QQmlApplicationEngine()
     # Tambahkan folder qml sebagai import path agar modul 'theme' bisa di-resolve.
@@ -57,6 +59,9 @@ def run(argv: list[str]) -> int:
 
     exit_code = app.exec()
 
+    del engine
+
     mqtt.stop()
     db.close()
+    logger.info(f"Aplikasi berhenti (exit_code={exit_code})")
     return exit_code

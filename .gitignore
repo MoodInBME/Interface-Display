@@ -21,6 +21,7 @@ data/*.bak*
 *.db.*.bak*
 logs/
 *.log
+test_log.txt
 
 # Qt / QML
 *.qmlc
