@@ -1,95 +1,28 @@
-# Interface-Display
-![https://img.shields.io/badge/github-repo-blue?logo=github](https://img.shields.io/badge/github-repo-blue?logo=github)
+# Interface-Display (arsip)
 
-Lapisan antarmuka & tampilan (kiosk) untuk **MoodIn — Smart Mirror untuk Klasifikasi Mood Berbasis Graph Convolutional Network dan remote Photoplethysmography sebagai Personal Wellness Coach**.
+> **Repo ini diarsipkan dan bersifat _read-only_ sejak fase Tugas Akhir.** Antarmuka MoodIn kini dibangun dengan Flutter di [Interface-App](https://github.com/MoodInBME/Interface-App). Isi repo ini tidak dikembangkan lagi dan tidak mengikuti kontrak pesan versi TA.
 
-Dibangun dengan **PySide6 + QML**, berjalan fullscreen pada panel Waveshare 10.1" 1024x600. Target utama saat ini **NVIDIA Jetson Orin Nano Super (8 GB, Ubuntu 24.04, JetPack 7.2)** — board yang sama dengan mesin inferensi. Repo ini adalah salah satu dari empat repo organisasi `MoodIn`:
+Bagian dari proyek [MoodIn](https://github.com/MoodInBME/MoodIn-master). Isi repo ini sama dengan tag [`gemastik-xix-2026`](https://github.com/MoodInBME/Interface-Display/tree/gemastik-xix-2026), ditambah pembaruan README ini dan catatan arsip di `AGENTS.md`.
 
-| Repo | Peran |
-| --- | --- |
-| `MoodIn-master` | Orkestrator / boot / intro alat |
-| `Hardware-Connections` | Kamera, sensor, protokol fisik, presence |
-| `Software-Architecture` | Inferensi DL (ST-GCN + STC-rPPG), fusi VA-bridge |
-| **`Interface-Display`** | **Layar kiosk: navigasi, input, tampilan hasil, tren lokal** |
+## Isi repo
 
-## Arsitektur & Peran
-Repo ini **tidak memuat model dan tidak melakukan inferensi**. Ia hanya berlangganan MQTT dan menggambar layar berdasarkan kontrak *payload*.
-```
-    Hardware-Connections   Software-Architecture   Interface-Display (repo ini)
-    (presence, sinyal)     (hasil inferensi)       (subscribe + publish command)
-            \                     |                     /
-             \                    |                    /
-              +------------ MQTT Broker (TLS :8883) --+
-```
+| Bagian                  | Isi                                                                                                     | Catatan                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `src/moodin_interface/` | Aplikasi kiosk PySide6 + QML: layar idle, persetujuan, perekaman, hasil, tren, dan pengaturan           | Memakai kontrak pesan v1.1.0                                 |
+| `web/`                  | Prototipe kiosk web (React + Vite) untuk layar _portrait_ 600×1024, termasuk layar Home Tamu dari Figma | Snapshot 8 Agustus 2026, belum diuji                         |
+| `devkit/`               | Simulator MQTT untuk mengembangkan UI tanpa model (`tools/dev_simulator.py`)                            | —                                                            |
+| `docs/`                 | Kontrak pesan v1.1.0 versi repo ini dan peta layar                                                      | Berbeda dari kontrak v1.0.0 di MoodIn-master                 |
+| `tests/`                | Uji kontrak, basis data, dan _state machine_                                                            | —                                                            |
+| `web/public/assets/`    | Aset SVG maskot dan ikon _mood_                                                                         | Boleh dipakai ulang di Interface-App dengan mencatat asalnya |
 
-## 1. Anda tidak perlu menunggu model
-Seluruh UI dapat dikembangkan dan diuji mandiri hari ini, tanpa Jetson, tanpa kamera, tanpa checkpoint. 
-Anda dapat menggunakan `mock_inference_publisher.py` (yang dapat di-generate dari `Software-Architecture`) untuk mengirim *payload* *dummy* via MQTT.
+## Prinsip UI yang masih relevan untuk Interface-App
 
-Skenario *mock* yang didukung:
-| `--scenario` | Perilaku | Menguji |
-|---|---|---|
-| `cycle` | berputar melewati kelima mood | transisi kartu, animasi, warna |
-| `stable` | satu mood tetap | layar diam, keterbacaan jangka panjang |
-| `degraded` | `physio_used=false`, SNR rendah | jalur degradasi, kartu TTV tersembunyi |
-| `noisy` | VA acak | ketahanan terhadap kedip dan lonjakan |
+- Jangan menampilkan angka basi. Bila jalur fisiologis tidak tersedia, sembunyikan kartu tanda vital; jangan tampilkan nilai terakhir.
+- Jangan menampilkan hasil dari jendela pengukuran yang belum penuh; tampilkan indikator kemajuan.
+- Mode demo atau simulasi wajib diberi penanda yang selalu terlihat.
+- Gunakan latar gelap dan kontras tinggi untuk tampilan di balik cermin dua arah, dan hindari elemen sentuh yang menuntut presisi.
+- UI tidak menerima citra wajah; hanya nilai numerik.
 
-## 2. Aturan Degradasi (Spesifikasi UI Wajib)
+## Lisensi
 
-| Kondisi | Perilaku UI yang wajib |
-|---|---|
-| `physio_used=false` | Tampilkan mood, **sembunyikan** kartu tanda vital. Jangan tampilkan HR terakhir yang basi. |
-| `face_detected=false` (>3s)| Kembali ke layar idle. |
-| `buffer_fill < 1.0` | Tampilkan progress ring. Jangan pernah menampilkan mood dari jendela yang belum penuh. |
-| `presence=offline` | Banner engine terputus, bekukan kartu, redupkan. |
-| `confidence < 0.5` | Tampilkan mood dengan penanda ketidakpastian, jangan menyembunyikannya. |
-
-*Prinsip: Menampilkan angka basi pada perangkat kesehatan lebih buruk daripada tidak menampilkan apa pun.*
-
-## 3. Desain Layar (Dua Permukaan)
-**Cermin (Layar 10,1 inci 1024x600 landscape).** Dilihat dari jarak sekitar 55 cm di balik kaca dua arah (absorpsi 80-90% cahaya).
-- Latar **hitam pekat**. Setiap piksel terang membuang anggaran cahaya yang sudah tipis.
-- Kontras tinggi, ukuran font minimum besar. Tanpa hover/elemen sentuh presisi. Animasi harus halus dan lambat.
-
-**Aplikasi Pendamping (Android/iOS).** Menangani autentikasi, pendaftaran, dan melihat riwayat data secara penuh. Cermin tetap dapat beroperasi dalam **mode tamu** tanpa login/riwayat.
-
-## 4. Struktur Folder & Modul
-
-```
-Interface-Display/
-|-- config/          # app_config.yaml, logging.yaml (non-rahasia)
-|-- scripts/         # install.sh, run_kiosk.sh, systemd unit
-|-- src/moodin_interface/
-|   |-- app.py       # bootstrap QGuiApplication + QML engine
-|   |-- config.py    # loader konfigurasi (.env + yaml)
-|   |-- core/        # models, state_machine, bridge (Python<->QML)
-|   |-- ipc/         # contracts + mqtt_client
-|   |-- data/        # database.py (SQLite tren)
-|   `-- resources/qml/  # Main.qml + screens + components + theme
-|-- tests/
-`-- docs/            # ipc-contract.md, screen-map.md, figma-links.md
-```
-
-## 5. Prasyarat & Instalasi
-- **NVIDIA Jetson Orin Nano Super** (Ubuntu 24.04, JetPack 7.2).
-- Panel Waveshare masuk lewat HDMI; gunakan adapter aktif **DP→HDMI** untuk Jetson.
-- Broker MQTT aktif dengan TLS (sertifikat CA tersedia).
-
-```bash
-git clone https://github.com/MoodInBME/Interface-Display.git /opt/moodin/Interface-Display
-cd /opt/moodin/Interface-Display
-bash scripts/install.sh
-```
-
-### Development (windowed)
-```bash
-source .venv/bin/activate
-MOODIN_DISPLAY_MODE=windowed python -m moodin_interface
-```
-
-## 6. Privasi di sisi UI (UU PDP No. 27/2022)
-UI **tidak pernah** menerima citra wajah maupun landmark mentah dari MQTT. Pengenalan wajah diproses murni di perangkat *edge*; yang menyeberang ke MQTT hanyalah skalar numerik. Data riwayat disimpan secara lokal di SQLite dan dapat dihapus.
-
-## Lisensi & Tim
-- LGPL-3.0-or-later (mengikuti PySide6). Lihat `LICENSE`.
-- **VisionaryX** - Institut Teknologi Sepuluh Nopember (GEMASTIK Divisi 9)
+LGPL-3.0-or-later, mengikuti PySide6. Lihat [LICENSE](LICENSE). Dibuat oleh tim VisionaryX, Institut Teknologi Sepuluh Nopember, untuk GEMASTIK XIX 2026.
