@@ -1,6 +1,6 @@
 # AGENTS.md - Interface-Display (MoodIn)
 
-> **ARSIP:** repo ini diarsipkan pada fase Tugas Akhir dan tidak dikembangkan lagi. Instruksi di bawah adalah versi era GEMASTIK dan tidak berlaku untuk pekerjaan baru. Antarmuka TA dikembangkan di repo Interface-App.
+> **ARSIP:** repo ini diarsipkan pada tahap Proposal Tugas Akhir (Pra-TA) dan tidak dikembangkan lagi. Instruksi di bawah adalah versi era GEMASTIK dan tidak berlaku untuk pekerjaan baru. Antarmuka baru dikembangkan di repo Interface-App.
 
 Berlaku untuk seluruh isi repo ini. Dibaca otomatis oleh Antigravity CLI.
 
